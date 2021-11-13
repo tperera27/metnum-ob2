@@ -1,11 +1,10 @@
 function Runge_Kutta (intervals, tmax, dt, x0, v0)
-    phi = cell(3,4);
-    tao1 = 1/2;
-    tao2 = 1;
-
-
+    
+    %Calculo aceleración
     a = @(tita) (-sin(tita));
     
+    %Phi precalculado
+    phi = cell(3,4);
 
     phi{1,1} = 1;
     phi{1,2} = dt / 2;
@@ -19,15 +18,8 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
     phi{3,3} = (2/3)*dt;
     phi{3,4} = (dt/6);
 
+    %Parámetros
     tao = {1/2, 1, 1};
-    
-    time = 0:dt:tmax;
-    x = zeros(1, intervals);
-    x(1) = x0;
-    v = zeros(1, intervals);
-    v(1) = v0;
-    resRK = zeros(2,2);
-
     alpha = cell(3,3);
     alpha{1,1} = 0;
     alpha{2,1} = 0;
@@ -35,6 +27,21 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
     alpha{3,1} = 0;
     alpha{3,2} = 0;
     alpha{3,3} = 0;
+    
+    %Vector con los tiempos a graficar
+    time = 0:dt:tmax;
+    
+    %Posición angular
+    x = zeros(1, intervals);
+    x(1) = x0;
+    
+    %Velocidad angular
+    v = zeros(1, intervals);
+    v(1) = v0;
+    
+    %Resultados intermedios
+    resRK = zeros(2,2);
+
         
     ts = 1;
     while (ts < intervals)
@@ -59,10 +66,10 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
-    plot(time, x,"r");
-    xlabel ("t");
-    ylabel ("u(t)");
-    title ("");
+    plot(time, x, "r");
+    xlabel ("Tiempo", "fontsize", 20);
+    ylabel ("Posición angular", "fontsize", 20);
+    title ("Péndulo simple - Método de Runge-Kutta de tercer orden", "fontsize", 30);
 end
 
 
