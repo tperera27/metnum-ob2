@@ -1,7 +1,6 @@
-
-
 function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     
+    %Phi precalculado
     phi = cell(3,4);
     
     phi{1,1} = 1;
@@ -15,7 +14,8 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     phi{3,2} = (dt/4);
     phi{3,3} = 0;
     phi{3,4} = ((3*dt)/4);
-
+    
+    %Parámetros
     tao = {1/3, 2/3, 1};
     alpha = zeros(3,3);
     alpha(1,1) = 1;
@@ -25,38 +25,41 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     alpha(3,2) = -2/3;
     alpha(3,3) = 1/3;
     
-    
+    %Vector con los tiempos a graficar
     time = 0:dt:tmax;
     
-    
+    %Posición radial
     r = zeros(1, intervals);
     r(1) = r0;
     
-    
+    %Velocidad radial
     v = zeros(1, intervals);
     v(1) = v0;
     
+    %Posición angular
     tita = zeros(1, intervals);
     tita(1) = tita0;
     
+    %Velocidad angular
     w = zeros(1, intervals);
     w(1) = w0;
     
+    %Resultados intermedios
     resResorte = zeros(2,2);
     resPendulo = zeros(2,2);
     
-    % Aceleración del resorte (radial)
+    %Calculo aceleración del resorte (radial)
     ar = @(t) (((w(t))^2)*(0.5 + r(t)) + (cos(tita(t))*9.81) - (98.1 * r(t)));
     art = @(rt,vt,titat,wt) (((wt^2)*(0.5 + rt) + (cos(titat))*9.81) - (98.1 * rt));
     
-    % Aceleración del pendulo (angular)
+    %Calculo aceleración del pendulo (angular)
     aa = @(t) (-( (2*r(t)*tita(t)) + (9.81*sin(tita(t))) ) / (0.5 + r(t)) );
     aat = @(rt,vt,titat,wt) (-( (2*rt*titat) + (9.81*sin(titat)) ) / (0.5 + rt) );
    
     ts = 1;
     while (ts < intervals)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %       Primer Paso        %
+        %       Primer paso        %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %Ecuaciones 4 y 5
         
@@ -73,7 +76,7 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         resPendulo(1,2) = phi{1,1}*w(ts) + phi{1,2}*aa(ts);
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %       Segundo Paso        %
+        %       Segundo paso        %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %Ecuaciones 8 y 9
         
@@ -90,7 +93,7 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         resPendulo(2,2) = phi{2,1}*w(ts) + phi{2,2}*aa(ts) + phi{2,3}*aat(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2));
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %       Tercer Paso        %
+        %       Tercer paso        %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %Ecuaciones 13 y 14
         
