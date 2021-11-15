@@ -1,8 +1,8 @@
 function Runge_Kutta (intervals, tmax, dt, r0, v0, tita0, w0)
 
     %Calculo aceleración
-    tita_a = @(tita, v_tita, r, v) ((-2*v*v_tita - 9.81*sin(tita)) / (0.5+r))
-    a = @(tita, v_tita, r) ((v_tita**2)*(0.5 + r) + cos(tita)*9.81 - 98.1 * r)
+    tita_a = @(tita, v_tita, r, v) ((-2*v*v_tita - 9.81*sin(tita)) / (0.5+r));
+    a = @(tita, v_tita, r) ((v_tita**2)*(0.5 + r) + cos(tita)*9.81 - 98.1 * r);
     
     %Phi precalculado
     phi = cell(3,4);

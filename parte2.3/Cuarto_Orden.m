@@ -140,7 +140,6 @@ function Cuarto_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         ts = ts + 1;
     endwhile
     
-    disp(tita)
     plot(time, tita, "g");
     xlabel ("Tiempo", "fontsize", 20);
     ylabel ("Posición angular", "fontsize", 20);

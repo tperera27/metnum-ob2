@@ -1,59 +1,59 @@
 function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     
-    %Phi precalculado
-    phi = cell(3,4);
+    %phiTO precalculado
+    phiTO = cell(3,4);
     
-    phi{1,1} = 1;
-    phi{1,2} = dt / 3;
+    phiTO{1,1} = 1;
+    phiTO{1,2} = dt / 3;
 
-    phi{2,1} = 1;
-    phi{2,2} = 0;
-    phi{2,3} = (2*dt) / 3;
+    phiTO{2,1} = 1;
+    phiTO{2,2} = 0;
+    phiTO{2,3} = (2*dt) / 3;
 
-    phi{3,1} = 1;
-    phi{3,2} = (dt/4);
-    phi{3,3} = 0;
-    phi{3,4} = ((3*dt)/4);
+    phiTO{3,1} = 1;
+    phiTO{3,2} = (dt/4);
+    phiTO{3,3} = 0;
+    phiTO{3,4} = ((3*dt)/4);
     
     %Parámetros
-    tao = {1/3, 2/3, 1};
-    alpha = zeros(3,3);
-    alpha(1,1) = 1;
-    alpha(2,1) = -2/3;
-    alpha(2,2) = 2/3;
-    alpha(3,1) = 1/3;
-    alpha(3,2) = -2/3;
-    alpha(3,3) = 1/3;
+    taoTO = {1/3, 2/3, 1};
+    alphaTO = zeros(3,3);
+    alphaTO(1,1) = 1;
+    alphaTO(2,1) = -2/3;
+    alphaTO(2,2) = 2/3;
+    alphaTO(3,1) = 1/3;
+    alphaTO(3,2) = -2/3;
+    alphaTO(3,3) = 1/3;
     
     %Vector con los tiempos a graficar
     time = 0:dt:tmax;
     
     %Posición radial
-    r = zeros(1, intervals);
-    r(1) = r0;
+    rTO = zeros(1, intervals);
+    rTO(1) = r0;
     
     %Velocidad radial
-    v = zeros(1, intervals);
-    v(1) = v0;
+    vTO = zeros(1, intervals);
+    vTO(1) = v0;
     
     %Posición angular
-    tita = zeros(1, intervals);
-    tita(1) = tita0;
+    titaTO = zeros(1, intervals);
+    titaTO(1) = tita0;
     
     %Velocidad angular
-    w = zeros(1, intervals);
-    w(1) = w0;
+    wTO = zeros(1, intervals);
+    wTO(1) = w0;
     
     %Resultados intermedios
-    resResorte = zeros(2,2);
-    resPendulo = zeros(2,2);
+    resResorteTO = zeros(2,2);
+    resPenduloTO = zeros(2,2);
     
     %Calculo aceleración del resorte (radial)
-    ar = @(t) (((w(t))^2)*(0.5 + r(t)) + (cos(tita(t))*9.81) - (98.1 * r(t)));
+    ar = @(t) (((wTO(t))^2)*(0.5 + rTO(t)) + (cos(titaTO(t))*9.81) - (98.1 * rTO(t)));
     art = @(rt,vt,titat,wt) (((wt^2)*(0.5 + rt) + (cos(titat))*9.81) - (98.1 * rt));
     
     %Calculo aceleración del pendulo (angular)
-    aa = @(t) (-( (2*r(t)*tita(t)) + (9.81*sin(tita(t))) ) / (0.5 + r(t)) );
+    aa = @(t) (-( (2*rTO(t)*titaTO(t)) + (9.81*sin(titaTO(t))) ) / (0.5 + rTO(t)) );
     aat = @(rt,vt,titat,wt) (-( (2*rt*titat) + (9.81*sin(titat)) ) / (0.5 + rt) );
    
     ts = 1;
@@ -65,15 +65,15 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte primer paso
         % u{ts + dt/3}
-        resResorte(1,1) = phi{1,1}*r(ts) + phi{1,2}*v(ts) + (1/2)*((dt/3)^2)*(alpha(1,1))*ar(ts);
+        resResorteTO(1,1) = phiTO{1,1}*rTO(ts) + phiTO{1,2}*vTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*ar(ts);
         % v{ts + dt/3}
-        resResorte(1,2) = phi{1,1}*v(ts) + phi{1,2}*ar(ts);
+        resResorteTO(1,2) = phiTO{1,1}*vTO(ts) + phiTO{1,2}*ar(ts);
         
         % Pendulo primer paso
         % u{ts + dt/3}
-        resPendulo(1,1) = phi{1,1}*tita(ts) + phi{1,2}*w(ts) + (1/2)*((dt/3)^2)*(alpha(1,1))*aa(ts);
+        resPenduloTO(1,1) = phiTO{1,1}*titaTO(ts) + phiTO{1,2}*wTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*aa(ts);
         % v{ts + dt/3}
-        resPendulo(1,2) = phi{1,1}*w(ts) + phi{1,2}*aa(ts);
+        resPenduloTO(1,2) = phiTO{1,1}*wTO(ts) + phiTO{1,2}*aa(ts);
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %       Segundo paso        %
@@ -82,15 +82,15 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte segundo paso
         % u{ts + 2dt/3}
-        resResorte(2,1) = phi{2,1}*r(ts) + phi{2,2}*v(ts) + phi{2,3}*resResorte(1,2) + (0.5)*((2*dt/3)^2)*( (alpha(2,1)*ar(ts)) + (alpha(2,2)*art(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2))) );
+        resResorteTO(2,1) = phiTO{2,1}*rTO(ts) + phiTO{2,2}*vTO(ts) + phiTO{2,3}*resResorteTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*ar(ts)) + (alphaTO(2,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
         % v{ts + 2dt/3}
-        resResorte(2,2) = phi{2,1}*v(ts) + phi{2,2}*ar(ts) + phi{2,3}*art(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2));
+        resResorteTO(2,2) = phiTO{2,1}*vTO(ts) + phiTO{2,2}*ar(ts) + phiTO{2,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
 
         % Pendulo segundo paso
         % u{ts + 2dt/3}
-        resPendulo(2,1) = phi{2,1}*tita(ts) + phi{2,2}*w(ts) + phi{2,3}*resPendulo(1,2) + (0.5)*((2*dt/3)^2)*( (alpha(2,1)*aa(ts)) + (alpha(2,2)*aat(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2))) );
+        resPenduloTO(2,1) = phiTO{2,1}*titaTO(ts) + phiTO{2,2}*wTO(ts) + phiTO{2,3}*resPenduloTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*aa(ts)) + (alphaTO(2,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
         % v{ts + 2dt/3}
-        resPendulo(2,2) = phi{2,1}*w(ts) + phi{2,2}*aa(ts) + phi{2,3}*aat(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2));
+        resPenduloTO(2,2) = phiTO{2,1}*wTO(ts) + phiTO{2,2}*aa(ts) + phiTO{2,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %       Tercer paso        %
@@ -99,20 +99,20 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte segundo paso
         % u{ts + dt}
-        r(ts + 1) = phi{3,1}*r(ts) + phi{3,2}*v(ts) + phi{3,3}*resResorte(1,2) + phi{3,4}*resResorte(2,2) + (0.5)*(dt^2)*( (alpha(3,1)*ar(ts)) + (alpha(3,2)*art(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2))) + (alpha(3,3)*art(resResorte(2,1), resResorte(2,2), resPendulo(2,1), resPendulo(2,2))) );
+        rTO(ts + 1) = phiTO{3,1}*rTO(ts) + phiTO{3,2}*vTO(ts) + phiTO{3,3}*resResorteTO(1,2) + phiTO{3,4}*resResorteTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*ar(ts)) + (alphaTO(3,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
         % v{ts + dt}
-        v(ts + 1) = phi{3,1}*v(ts) + phi{3,2}*ar(ts) + phi{3,3}*art(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2)) + phi{3,4}*art(resResorte(2,1), resResorte(2,2), resPendulo(2,1), resPendulo(2,2));
+        vTO(ts + 1) = phiTO{3,1}*vTO(ts) + phiTO{3,2}*ar(ts) + phiTO{3,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
         
         % Pendulo segundo paso
         % u{ts + dt}
-        tita(ts + 1) = phi{3,1}*tita(ts) + phi{3,2}*w(ts) + phi{3,3}*resPendulo(1,2) + phi{3,4}*resPendulo(2,2) + (0.5)*(dt^2)*( (alpha(3,1)*aa(ts)) + (alpha(3,2)*aat(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2))) + (alpha(3,3)*aat(resResorte(2,1), resResorte(2,2), resPendulo(2,1), resPendulo(2,2))) );
+        titaTO(ts + 1) = phiTO{3,1}*titaTO(ts) + phiTO{3,2}*wTO(ts) + phiTO{3,3}*resPenduloTO(1,2) + phiTO{3,4}*resPenduloTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*aa(ts)) + (alphaTO(3,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
         % v{ts + dt}
-        w(ts + 1) = phi{3,1}*w(ts) + phi{3,2}*aa(ts) + phi{3,3}*aat(resResorte(1,1), resResorte(1,2), resPendulo(1,1), resPendulo(1,2)) + phi{3,4}*aat(resResorte(2,1), resResorte(2,2), resPendulo(2,1), resPendulo(2,2));
+        wTO(ts + 1) = phiTO{3,1}*wTO(ts) + phiTO{3,2}*aa(ts) + phiTO{3,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
         
         ts = ts + 1;
     endwhile
         
-    plot(time, tita, "b");
+    plot(time, titaTO, "b");
     xlabel ("Tiempo", "fontsize", 20);
     ylabel ("Posición angular", "fontsize", 20);
     title ("Péndulo resorte - Método explicito de tercer orden", "fontsize", 30);
