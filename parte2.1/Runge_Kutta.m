@@ -68,12 +68,14 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
     %plot(time, xRK, "r");
     %xlabel ("Tiempo", "fontsize", 20);
     %ylabel ("Posición", "fontsize", 20);
-    %title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 30);
+    %title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 20);
     
-    plot(xRK, vRK, "r", xRK, vRK, "b.");
+    plot3(xRK, vRK, time);
+    %plot(xRK, vRK);
     xlabel ("Posición", "fontsize", 20);
     ylabel ("Velocidad", "fontsize", 20);
-    title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 30);
+    zlabel ("Tiempo", "fontsize", 20);
+    title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 20);
 end
 
 

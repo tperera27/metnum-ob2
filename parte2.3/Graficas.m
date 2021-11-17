@@ -318,7 +318,7 @@ function Graficas (intervals, tmax, dt, r0, v0, tita0, w0)
     h = legend ("Runge-Kutta", "Tercer orden", "Cuarto orden");
     legend (h, "location", "northeastoutside");
     set (h, "fontsize", 20)
-    title ("Péndulo simple", "fontsize", 30);
+    title ("Péndulo resorte", "fontsize", 20);
 
  
 end

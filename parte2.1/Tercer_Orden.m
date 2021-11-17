@@ -68,12 +68,14 @@ function Tercer_Orden (intervals, tmax, dt, x0, v0)
     %plot(time, xTO, "r.-");
     %xlabel ("Tiempo", "fontsize", 20);
     %ylabel ("Posición", "fontsize", 20);
-    %title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 30);
+    %title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 20);
     
-    plot(xTO, vTO, "r-",xTO, vTO, "b.");
+    %plot3(xTO, vTO, time);
+    plot(xTO, vTO);
     xlabel ("Posición", "fontsize", 20);
     ylabel ("Velocidad", "fontsize", 20);
-    title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 30);
+    %zlabel ("Tiempo", "fontsize", 20);
+    title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 20);
 end
 
 

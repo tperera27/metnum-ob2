@@ -66,9 +66,11 @@ function Cuarto_Orden (intervals, tmax, dt, x0, v0)
     %ylabel ("Posición", "fontsize", 20);
     %title ("Resorte elástico - Método explícito de cuarto orden", "fontsize", 30);
     
-    plot(xCO, vCO, "r", xCO, vCO, "b.");
+    plot3(xCO, vCO, time);
+    %plot(xCO, vCO);
     xlabel ("Posición", "fontsize", 20);
     ylabel ("Velocidad", "fontsize", 20);
+    zlabel ("Tiempo", "fontsize", 20);
     title ("Resorte elástico - Método explícito de cuarto orden", "fontsize", 30);
 end
 

@@ -186,7 +186,7 @@ function Graficas (intervals, tmax, dt, x0, v0)
     
     
     %plot(time(1,1537:1601), xRK(1,1537:1601), "k-", time(1,1537:1601), xTO(1,1537:1601), "b*-", time(1,1537:1601), xCO(1,1537:1601), "ro-");
-    plot(time, xRK, "ko", time, xTO, "bx-", time, xCO, "r*");
+    %plot(time, xRK, "ko", time, xTO, "bx-", time, xCO, "r*");
     xlabel ("Tiempo t", "fontsize", 20);
     ylabel ("Posición", "fontsize", 20);
     h = legend ("Runge-Kutta", "Tercer orden", "Cuarto orden");
