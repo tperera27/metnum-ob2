@@ -46,9 +46,9 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
     while (ts < intervals)
         %Primer orden
         %x_{t_s + tao1*dt}
-        resRK(1,1) = phiRK{1, 1}*xRK(ts) + phiRK{1,2}*vRK(ts) + ((0.5)*((tao{1}*dt)**2)*(alphaRK{1,1}*a(xRK(ts))));
+        resRK(1,1) = phiRK{1,1}*xRK(ts) + phiRK{1,2}*vRK(ts) + ((0.5)*((tao{1}*dt)**2)*(alphaRK{1,1}*a(xRK(ts))));
         %v_{t_s + tao1*dt}
-        resRK(1,2) = phiRK{1, 1}*vRK(ts) + phiRK{1,2}*a(xRK(ts));
+        resRK(1,2) = phiRK{1,1}*vRK(ts) + phiRK{1,2}*a(xRK(ts));
 
         %Segundo orden
         %x_{t_s + tao2*dt}
@@ -65,9 +65,14 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
-    plot(time, x, "r");
-    xlabel ("Tiempo", "fontsize", 20);
-    ylabel ("Posición", "fontsize", 20);
+    %plot(time, xRK, "r");
+    %xlabel ("Tiempo", "fontsize", 20);
+    %ylabel ("Posición", "fontsize", 20);
+    %title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 30);
+    
+    plot(xRK, vRK, "r", xRK, vRK, "b.");
+    xlabel ("Posición", "fontsize", 20);
+    ylabel ("Velocidad", "fontsize", 20);
     title ("Resorte elástico - Método de Runge-Kutta de tercer orden", "fontsize", 30);
 end
 

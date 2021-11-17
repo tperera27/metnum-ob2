@@ -82,10 +82,15 @@ function Cuarto_Orden_Phi (intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
-    plot(time, x, "g");
+    plot(time, xCO, "g");
     xlabel ("Tiempo", "fontsize", 20);
     ylabel ("Posición", "fontsize", 20);
-    title ("Resorte elástico - Método explicito de cuarto orden", "fontsize", 30);
+    title ("Resorte elástico - Método explícito de cuarto orden", "fontsize", 30);
+    
+    plot(xCO, vCO, "r");
+    xlabel ("Posición", "fontsize", 20);
+    ylabel ("Velocidad", "fontsize", 20);
+    title ("Resorte elástico - Método explícito de cuarto orden", "fontsize", 30);
 end
 
 
