@@ -66,9 +66,13 @@ function Runge_Kutta (intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
+    %plot3(x, v, time);
     plot(time, x, "r");
     xlabel ("Tiempo", "fontsize", 20);
     ylabel ("Posición angular", "fontsize", 20);
+    %xlabel ("Posición angular", "fontsize", 20);
+    %ylabel ("Velocidad angular", "fontsize", 20);
+    %zlabel ("Tiempo", "fontsize", 20);
     title ("Péndulo simple - Método de Runge-Kutta de tercer orden", "fontsize", 30);
 end
 

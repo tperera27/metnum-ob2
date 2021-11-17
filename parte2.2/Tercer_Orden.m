@@ -66,9 +66,13 @@ function Tercer_Orden(intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
-    plot(time, x, "b");
-    xlabel ("Tiempo", "fontsize", 20);
-    ylabel ("Posición angular", "fontsize", 20);
+    plot3(x, v, time);
+    %plot(time, x, "b");
+    %xlabel ("Tiempo", "fontsize", 20);
+    %ylabel ("Posición angular", "fontsize", 20);
+    xlabel ("Posición angular", "fontsize", 20);
+    ylabel ("Velociad angular", "fontsize", 20);
+    zlabel ("Tiempo", "fontsize", 20);
     title ("Péndulo simple - Método explicito de tercer orden", "fontsize", 30);
 end
 
