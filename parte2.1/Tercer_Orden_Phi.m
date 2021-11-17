@@ -1,4 +1,4 @@
-function Tercer_Orden (intervals, tmax, dt, x0, v0)
+function Tercer_Orden_Phi (intervals, tmax, dt, x0, v0)
     
     %Calculo aceleración
     a = @(u) (-((100*u) + (1000*(u**3))));
@@ -46,15 +46,15 @@ function Tercer_Orden (intervals, tmax, dt, x0, v0)
     while (ts < intervals)
         %Primer orden
         %x_{t_s + tao1*dt}
-        resTO(1,1) = xTO(ts) + (dt/3)*vTO(ts) + ((0.5)*((dt^2)/9)*(a(xTO(ts))));
+        resTO(1,1) = phiTO{1, 1}*xTO(ts) + phiTO{1,2}*vTO(ts) + ((0.5)*((taoTO{1}*dt)**2)*(alphaTO{1,1}*a(xTO(ts))));
         %v_{t_s + tao1*dt}
-        resTO(1,2) = vTO(ts) + (dt/3)*a(xTO(ts));
+        resTO(1,2) = phiTO{1, 1}*vTO(ts) + phiTO{1,2}*a(xTO(ts));
 
         %Segundo orden
         %x_{t_s + tao2*dt}
-        resTO(2,1) = xTO(ts) + ((2*dt)/3)*vTO(ts) + ((dt^2)/27)*( (2*a(xTO(ts))) + (4*a(resTO(1,1))) );
+        resTO(2,1) = phiTO{2,1}*xTO(ts) + phiTO{2,2}*vTO(ts) + phiTO{2,3}*resTO(1,2) + ( 0.5*((taoTO{2}*dt)**2)*( (alphaTO{2,1}*a(xTO(ts))) + (alphaTO{2,2}*a(resTO(1,1))) ) );
         %v_{t_s + tao2*dt}
-        resTO(2,2) = vTO(ts) + (2/3)*dt*a(resTO(1,1));
+        resTO(2,2) = phiTO{2,1}*vTO(ts) + phiTO{2,2}*a(xTO(ts)) + phiTO{2,3}*a(resTO(1,1));
         
         %Tercer orden
         %x_{t_s + dt}
@@ -65,12 +65,12 @@ function Tercer_Orden (intervals, tmax, dt, x0, v0)
         ts = ts + 1;
     endwhile
     
-    %plot(time, xTO, "r.-");
-    %xlabel ("Tiempo", "fontsize", 20);
-    %ylabel ("Posición", "fontsize", 20);
-    %title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 30);
+    plot(time, xTO, "b");
+    xlabel ("Tiempo", "fontsize", 20);
+    ylabel ("Posición", "fontsize", 20);
+    title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 30);
     
-    plot(xTO, vTO, "r-",xTO, vTO, "b.");
+    plot(xTO, vTO, "r");
     xlabel ("Posición", "fontsize", 20);
     ylabel ("Velocidad", "fontsize", 20);
     title ("Resorte elástico - Método explícito de tercer orden", "fontsize", 30);

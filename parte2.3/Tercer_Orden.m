@@ -16,7 +16,6 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     phiTO{3,4} = ((3*dt)/4);
     
     %Parámetros
-    taoTO = {1/3, 2/3, 1};
     alphaTO = zeros(3,3);
     alphaTO(1,1) = 1;
     alphaTO(2,1) = -2/3;
@@ -49,12 +48,10 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
     resPenduloTO = zeros(2,2);
     
     %Calculo aceleración del resorte (radial)
-    ar = @(t) (((wTO(t))^2)*(0.5 + rTO(t)) + (cos(titaTO(t))*9.81) - (98.1 * rTO(t)));
     art = @(rt,vt,titat,wt) (((wt^2)*(0.5 + rt) + (cos(titat))*9.81) - (98.1 * rt));
     
     %Calculo aceleración del pendulo (angular)
-    aa = @(t) (-( (2*rTO(t)*titaTO(t)) + (9.81*sin(titaTO(t))) ) / (0.5 + rTO(t)) );
-    aat = @(rt,vt,titat,wt) (-( (2*rt*titat) + (9.81*sin(titat)) ) / (0.5 + rt) );
+    aat = @(rt,vt,titat,wt) (-( (2*wt*vt) + (9.81*sin(titat)) ) / (0.5 + rt) );
    
     ts = 1;
     while (ts < intervals)
@@ -65,15 +62,15 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte primer paso
         % u{ts + dt/3}
-        resResorteTO(1,1) = phiTO{1,1}*rTO(ts) + phiTO{1,2}*vTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*ar(ts);
+        resResorteTO(1,1) = phiTO{1,1}*rTO(ts) + phiTO{1,2}*vTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts));
         % v{ts + dt/3}
-        resResorteTO(1,2) = phiTO{1,1}*vTO(ts) + phiTO{1,2}*ar(ts);
+        resResorteTO(1,2) = phiTO{1,1}*vTO(ts) + phiTO{1,2}*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts));
         
         % Pendulo primer paso
         % u{ts + dt/3}
-        resPenduloTO(1,1) = phiTO{1,1}*titaTO(ts) + phiTO{1,2}*wTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*aa(ts);
+        resPenduloTO(1,1) = phiTO{1,1}*titaTO(ts) + phiTO{1,2}*wTO(ts) + (1/2)*((dt/3)^2)*(alphaTO(1,1))*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts));
         % v{ts + dt/3}
-        resPenduloTO(1,2) = phiTO{1,1}*wTO(ts) + phiTO{1,2}*aa(ts);
+        resPenduloTO(1,2) = phiTO{1,1}*wTO(ts) + phiTO{1,2}*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts));
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %       Segundo paso        %
@@ -82,15 +79,15 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte segundo paso
         % u{ts + 2dt/3}
-        resResorteTO(2,1) = phiTO{2,1}*rTO(ts) + phiTO{2,2}*vTO(ts) + phiTO{2,3}*resResorteTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*ar(ts)) + (alphaTO(2,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
+        resResorteTO(2,1) = phiTO{2,1}*rTO(ts) + phiTO{2,2}*vTO(ts) + phiTO{2,3}*resResorteTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts))) + (alphaTO(2,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
         % v{ts + 2dt/3}
-        resResorteTO(2,2) = phiTO{2,1}*vTO(ts) + phiTO{2,2}*ar(ts) + phiTO{2,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
+        resResorteTO(2,2) = phiTO{2,1}*vTO(ts) + phiTO{2,2}*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts)) + phiTO{2,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
 
         % Pendulo segundo paso
         % u{ts + 2dt/3}
-        resPenduloTO(2,1) = phiTO{2,1}*titaTO(ts) + phiTO{2,2}*wTO(ts) + phiTO{2,3}*resPenduloTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*aa(ts)) + (alphaTO(2,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
+        resPenduloTO(2,1) = phiTO{2,1}*titaTO(ts) + phiTO{2,2}*wTO(ts) + phiTO{2,3}*resPenduloTO(1,2) + (0.5)*((2*dt/3)^2)*( (alphaTO(2,1)*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts))) + (alphaTO(2,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) );
         % v{ts + 2dt/3}
-        resPenduloTO(2,2) = phiTO{2,1}*wTO(ts) + phiTO{2,2}*aa(ts) + phiTO{2,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
+        resPenduloTO(2,2) = phiTO{2,1}*wTO(ts) + phiTO{2,2}*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts)) + phiTO{2,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2));
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %       Tercer paso        %
@@ -99,15 +96,15 @@ function Tercer_Orden(intervals, tmax, dt, r0, v0, tita0, w0)
         
         % Resorte segundo paso
         % u{ts + dt}
-        rTO(ts + 1) = phiTO{3,1}*rTO(ts) + phiTO{3,2}*vTO(ts) + phiTO{3,3}*resResorteTO(1,2) + phiTO{3,4}*resResorteTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*ar(ts)) + (alphaTO(3,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
+        rTO(ts + 1) = phiTO{3,1}*rTO(ts) + phiTO{3,2}*vTO(ts) + phiTO{3,3}*resResorteTO(1,2) + phiTO{3,4}*resResorteTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts))) + (alphaTO(3,2)*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
         % v{ts + dt}
-        vTO(ts + 1) = phiTO{3,1}*vTO(ts) + phiTO{3,2}*ar(ts) + phiTO{3,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
+        vTO(ts + 1) = phiTO{3,1}*vTO(ts) + phiTO{3,2}*art(rTO(ts),vTO(ts),titaTO(ts),wTO(ts)) + phiTO{3,3}*art(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*art(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
         
         % Pendulo segundo paso
         % u{ts + dt}
-        titaTO(ts + 1) = phiTO{3,1}*titaTO(ts) + phiTO{3,2}*wTO(ts) + phiTO{3,3}*resPenduloTO(1,2) + phiTO{3,4}*resPenduloTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*aa(ts)) + (alphaTO(3,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
+        titaTO(ts + 1) = phiTO{3,1}*titaTO(ts) + phiTO{3,2}*wTO(ts) + phiTO{3,3}*resPenduloTO(1,2) + phiTO{3,4}*resPenduloTO(2,2) + (0.5)*(dt^2)*( (alphaTO(3,1)*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts))) + (alphaTO(3,2)*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2))) + (alphaTO(3,3)*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2))) );
         % v{ts + dt}
-        wTO(ts + 1) = phiTO{3,1}*wTO(ts) + phiTO{3,2}*aa(ts) + phiTO{3,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
+        wTO(ts + 1) = phiTO{3,1}*wTO(ts) + phiTO{3,2}*aat(rTO(ts),vTO(ts),titaTO(ts),wTO(ts)) + phiTO{3,3}*aat(resResorteTO(1,1), resResorteTO(1,2), resPenduloTO(1,1), resPenduloTO(1,2)) + phiTO{3,4}*aat(resResorteTO(2,1), resResorteTO(2,2), resPenduloTO(2,1), resPenduloTO(2,2));
         
         ts = ts + 1;
     endwhile
